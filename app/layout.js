@@ -7,6 +7,7 @@ import "./globals.css";
 import Footer from "@/components/Footer.js";
 import SessionWrapper from "@/components/SessionWrapper";
 import NextTopLoader from "nextjs-toploader";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive"/>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
