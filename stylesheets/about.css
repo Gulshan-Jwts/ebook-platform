@@ -1,0 +1,225 @@
+/* about.css */
+.about-page {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  color: #e0e0e0;
+  padding: 2rem 4%;
+  background: linear-gradient(135deg, #1c2526 0%, #2e4057 100%);
+  min-height: 100vh;
+}
+
+.about-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #2e4057, #1c2526);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+  font-size: 2.2rem;
+  color: #f4c430;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 4px;
+  background: linear-gradient(to right, #f4c430, #ff8c00);
+  border-radius: 4px;
+}
+
+.section-content {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.section-text {
+  flex: 1;
+}
+
+.section-text p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.section-image {
+  flex: 0 0 200px;
+}
+
+.profile-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f4c430;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.tech-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.tech-logos img {
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.tech-logos img:hover {
+  transform: scale(1.1);
+}
+
+.contact-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.contact-button {
+  display: inline-block;
+  padding: 0.7rem 1.5rem;
+  background: linear-gradient(to right, #f4c430, #ff8c00);
+  color: #1c2526;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+}
+
+.contact-button:hover {
+  background: linear-gradient(to right, #ff8c00, #f4c430);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Skeletons */
+.skeleton-section {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(90deg, #2e4057 25%, #3a506b 50%, #2e4057 75%);
+  background-size: 200% 100%;
+  animation: shine 1.5s infinite;
+  border-radius: 10px;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .about-page {
+    padding: 1.5rem 2%;
+  }
+
+  .about-section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .section-content {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .section-image {
+    flex: none;
+  }
+
+  .profile-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .section-text p {
+    font-size: 0.95rem;
+  }
+
+  .tech-logos {
+    gap: 0.8rem;
+  }
+
+  .tech-logos img {
+    width: 60px;
+    height: auto;
+    border-radius: 50%;
+  }
+
+  .contact-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .skeleton-section {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-page {
+    padding: 1rem 1%;
+  }
+
+  .about-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .section-text p {
+    font-size: 0.9rem;
+  }
+
+  .profile-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .tech-logos img {
+    width: 50px;
+    height: auto;
+    border-radius: 50%;
+  }
+
+  .contact-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .skeleton-section {
+    height: 200px;
+  }
+}
