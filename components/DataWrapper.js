@@ -31,7 +31,7 @@ const DataWrapper = ({ children }) => {
     }else {
       setIsLogedIn(false);
     }
-  }, [status]);
+  }, [status,session?.user]);
 
   useEffect(() => {
     const fetchBooks = async () => {

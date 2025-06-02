@@ -4,7 +4,7 @@ import "@/stylesheets/about.css";
 import Image from "next/image";
 import Link from "next/link";
 
-const About = () => {
+const Page = () => {
   const { isLoading } = false;
 
   return (
@@ -155,4 +155,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Page;

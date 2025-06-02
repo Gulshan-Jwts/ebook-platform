@@ -1,9 +1,10 @@
 "use client";
 import { useData } from "@/components/DataContext";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const { dbUser, books, isLoading } = useData();
   const [purchasedBooks, setPurchasedBooks] = useState([]);
 
@@ -34,7 +35,9 @@ const page = () => {
                   <div className="skeleton skeleton-thumbnail"></div>
                 ) : (
                   <Link href={`/book/details/${book._id}`}>
-                    <img
+                    <Image
+                    width={200}
+                    height={300}
                       src={book.image || "/placeholder.jpg"}
                       alt={`${book.title} Book Cover`}
                     />
@@ -86,4 +89,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

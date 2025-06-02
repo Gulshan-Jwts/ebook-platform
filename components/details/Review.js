@@ -1,5 +1,6 @@
 "use client";
 import { useData } from "@/components/DataContext";
+import Image from "next/image";
 import { useState } from "react";
 
 const Review = ({ book }) => {
@@ -147,7 +148,9 @@ const Review = ({ book }) => {
             {book.reviews.map((review) => (
               <div className="review-card" key={review._id}>
                 <div className="review-header">
-                  <img
+                  <Image
+                  width={50}
+                  height={50}
                     src={review.from.avatar || "/api/placeholder/50/50"}
                     alt="Reviewer Avatar"
                     className="reviewer-avatar"
@@ -174,7 +177,7 @@ const Review = ({ book }) => {
                   ))}
                 </div>
                 {review.title && <p className="review-title">{review.title}</p>}
-                <p className="review-text">"{review.message}"</p>
+                <p className="review-text">&quote;{review.message}&quote;</p>
               </div>
             ))}
           </div>

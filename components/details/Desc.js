@@ -1,3 +1,5 @@
+"use client";
+import Image from 'next/image';
 import React from 'react';
 
 const Desc = ({book,averageRating}) => {
@@ -5,7 +7,9 @@ const Desc = ({book,averageRating}) => {
 		<>
 			<section className='book-section'>
 				<div className='book-details'>
-					<img
+					<Image
+						width={200}
+						height={300}
 						src={book.image}
 						alt={`${book.title} Book Cover`}
 						className='book-image'

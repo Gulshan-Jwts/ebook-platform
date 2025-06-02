@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -13,7 +14,9 @@ const BooksGrid = ({ books, isLoading }) => {
               <div className="skeleton skeleton-thumbnail"></div>
             ) : (
               <Link href={`/book/details/${books[key]._id}`}>
-                <img
+                <Image
+                  width={200}
+                  height={300}
                   src={books[key].image || "/placeholder.jpg"}
                   alt={`${books[key].title} Book Cover`}
                 />

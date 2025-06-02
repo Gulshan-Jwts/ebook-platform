@@ -9,7 +9,7 @@ const fadeIn = {
   animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-const page = () => {
+const Page = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-sm">
@@ -165,4 +165,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

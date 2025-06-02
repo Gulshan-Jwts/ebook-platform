@@ -4,8 +4,9 @@ import { useData } from "@/components/DataContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Review from "@/components/details/Review";
+import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   const params = useParams();
 
   const { books, dbUser } = useData();
@@ -66,7 +67,7 @@ const page = () => {
     <>
       <section className="book-section">
         <div className="book-details">
-          <img src={book.image} alt="Book Cover" className="book-image" />
+          <Image width={200} height={300} src={book.image} alt="Book Cover" className="book-image" />
           <div className="book-info">
             <h1>{book.title}</h1>
             <div className="author">By {book.author}</div>
@@ -135,7 +136,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
 
 function averageRating(reviews) {
   if (!reviews.length) return "0.0";

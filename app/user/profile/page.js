@@ -5,8 +5,9 @@ import { signOut, useSession } from "next-auth/react";
 import "@/stylesheets/profile.css";
 import { useData } from "@/components/DataContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -32,7 +33,7 @@ const page = () => {
         userID: dbUser.username,
       });
     }
-  }, [status, dbUser]);
+  }, [status, dbUser,session?.user]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -96,7 +97,7 @@ const page = () => {
   return (
     <>
       <div className="profile-card">
-        <img src={user.image} alt="Profile Picture" className="profile-pic" />
+        <Image width={100} height={100} src={user.image} alt="Profile Picture" className="profile-pic" />
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username" className="label">
@@ -161,4 +162,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

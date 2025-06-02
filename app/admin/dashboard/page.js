@@ -7,7 +7,7 @@ import { UploadButton } from "@uploadthing/react";
 import { useData } from "@/components/DataContext";
 import { motion, AnimatePresence } from "framer-motion";
 
-const page = () => {
+const Page = () => {
   const { books } = useData();
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -419,4 +419,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
