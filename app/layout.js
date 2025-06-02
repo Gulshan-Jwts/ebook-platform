@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar.js";
 import "@/stylesheets/detail.css";
 import "@/stylesheets/feed.css";
+import "./globals.css";
 import Footer from "@/components/Footer.js";
 import SessionWrapper from "@/components/SessionWrapper";
 import NextTopLoader from "nextjs-toploader";

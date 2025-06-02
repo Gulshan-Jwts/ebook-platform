@@ -12,7 +12,13 @@ const Navbar = () => {
   return (
     <header>
       <Link href="/" className="logo">
-        Naveen Kewat
+        <img
+          src="/navLogo.jpg"
+          alt="Logo"
+          width={150}
+          height={50}
+          className="logo-image"
+        />
       </Link>
       {status === "loading" ? (
         <p>Loading...</p>

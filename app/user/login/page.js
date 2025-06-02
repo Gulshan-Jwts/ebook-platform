@@ -1,8 +1,9 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
-import "@/stylesheets/UserLogin.css";
+import "@/stylesheets/userLogin.css";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const UserLogin = () => {
   const { data: session } = useSession();
@@ -19,6 +20,9 @@ const UserLogin = () => {
       <div className="login-header">
         <h2>Login</h2>
         <p>Access your account to enjoy our books</p>
+        <p className="terms">
+          By Continue you agree to <u className="text-blue-700"><Link href="/terms">terms And Policy</Link></u>
+        </p>
       </div>
 
       <div className="login-form flex flex-col gap-4 mt-4">
@@ -60,8 +64,8 @@ const UserLogin = () => {
               y2="23.508"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#4c4c4c"></stop>
-              <stop offset="1" stop-color="#343434"></stop>
+              <stop offset="0" stopColor="#4c4c4c"></stop>
+              <stop offset="1" stopColor="#343434"></stop>
             </linearGradient>
             <path
               fill="url(#rL2wppHyxHVbobwndsT6Ca_AZOZNnY73haj_gr1)"
