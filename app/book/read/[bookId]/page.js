@@ -5,11 +5,11 @@ import { useParams } from "next/navigation.js";
 
 const PDFViewer = dynamic(() => import("./pdfVIew.js"), { ssr: false });
 
-const page = () => {
+const Page = () => {
 
   const { bookId } = useParams();
 
   return <PDFViewer bookId={bookId} />
 };
 
-export default page;
+export default Page;

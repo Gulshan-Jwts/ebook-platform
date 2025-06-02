@@ -75,7 +75,7 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
     return () => {
       if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
     };
-  }, [bookId]);
+  }, [bookId,pdfBlobUrl]);
 
   useEffect(() => {
     const handleContextMenu = (e) => e.preventDefault();

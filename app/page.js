@@ -20,7 +20,7 @@ const Page = () => {
 
   useEffect(() => {
     setHero(getTopSellingBook());
-  }, [books]);
+  }, [books,getTopSellingBook]);
 
   return (
     <>

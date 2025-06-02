@@ -49,15 +49,13 @@ const DataWrapper = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log(books, user, isLogedIn);
-    console.log(books && user || !isLogedIn);
     if (books && user || !isLogedIn) {
       console.log("hit")
       setIsLoading(false);
     } else {
       setIsLoading(true);
     }
-  }, [books, user]);
+  }, [books, user,isLogedIn]);
 
   return (
     <DataContext.Provider value={{ dbUser: user, books, isLoading }}>

@@ -178,7 +178,7 @@ const Page = () => {
       }
     }
     getSale();
-  }, []);
+  },);
 
   const expandVariants = {
     hidden: { height: 0, opacity: 0 },

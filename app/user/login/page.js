@@ -13,7 +13,7 @@ const UserLogin = () => {
     if (session) {
       router.push("/");
     }
-  }, [session]);
+  }, [session,router]);
 
   return (
     <div className="login-container">
