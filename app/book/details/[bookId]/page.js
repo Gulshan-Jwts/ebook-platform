@@ -67,7 +67,15 @@ const Page = () => {
     <>
       <section className="book-section">
         <div className="book-details">
-          <Image width={200} height={300} src={book.image} alt="Book Cover" className="book-image" />
+          {book.image && (
+            <Image
+              width={200}
+              height={300}
+              src={book.image}
+              alt="Book Cover"
+              className="book-image"
+            />
+          )}
           <div className="book-info">
             <h1>{book.title}</h1>
             <div className="author">By {book.author}</div>

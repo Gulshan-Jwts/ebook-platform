@@ -123,8 +123,13 @@ const Page = () => {
   };
 
   const handleDeleteClick = (book) => {
-    setDeleteBookId(book._id);
-    setShowDeleteModal(true);
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the book "${book.title}"? This action cannot be undone.`
+    );
+    if (confirmDelete) {
+      setDeleteBookId(book._id);
+      setShowDeleteModal(true);
+    }
   };
 
   const handleCancelDelete = () => {
@@ -132,15 +137,25 @@ const Page = () => {
     setDeleteBookId(null);
   };
 
+  useEffect(() => {
+    if (showDeleteModal && deleteBookId) {
+      handleConfirmDelete();
+    }
+  }, [showDeleteModal, deleteBookId]);
+  
+
   const handleConfirmDelete = async () => {
     start();
     try {
+      alert(deleteBookId)
+      
       const response = await fetch(`/api/admin/delete/${deleteBookId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       });
+      
 
       if (response.ok) {
         setShowDeleteModal(false);
@@ -178,7 +193,7 @@ const Page = () => {
       }
     }
     getSale();
-  },);
+  },[]);
 
   const expandVariants = {
     hidden: { height: 0, opacity: 0 },
@@ -393,28 +408,6 @@ const Page = () => {
         </div>
       </section>
 
-      {showDeleteModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Confirm Deletion</h3>
-            <p>
-              Are you sure you want to delete this book? This action cannot be
-              undone.
-            </p>
-            <div className="modal-actions">
-              <button className="cancel-button" onClick={handleCancelDelete}>
-                Cancel
-              </button>
-              <button
-                className="delete-confirm-button"
-                onClick={handleConfirmDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

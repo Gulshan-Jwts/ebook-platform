@@ -10,7 +10,7 @@ const Desc = ({book,averageRating}) => {
 					<Image
 						width={200}
 						height={300}
-						src={book.image}
+						src={book.image || '/placeholder.jpeg'}
 						alt={`${book.title} Book Cover`}
 						className='book-image'
 					/>

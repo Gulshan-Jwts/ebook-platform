@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { DataContext } from "./DataContext";
@@ -46,11 +47,10 @@ const DataWrapper = ({ children }) => {
       }
     };
     fetchBooks();
-  }, []);
+  },[]);
 
   useEffect(() => {
     if (books && user || !isLogedIn) {
-      console.log("hit")
       setIsLoading(false);
     } else {
       setIsLoading(true);

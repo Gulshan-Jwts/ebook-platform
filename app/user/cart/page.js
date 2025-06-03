@@ -33,7 +33,7 @@ const Page = () => {
                     <Image
                       height={200}
                       width={150}
-                      src={book.image || "/placeholder.jpg"}
+                      src={book.image || "/placeholder.jpeg"}
                       alt={`${book.title} Book Cover`}
                     />
                   </Link>

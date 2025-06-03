@@ -7,6 +7,26 @@ const nextConfig = {
     });
     return config;
   },
+   images: {
+    
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.ufs.sh',
+        pathname: '/f/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.uploadthing.com',
+        pathname: '/f/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

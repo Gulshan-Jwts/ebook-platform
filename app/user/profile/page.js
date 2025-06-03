@@ -33,7 +33,7 @@ const Page = () => {
         userID: dbUser.username,
       });
     }
-  }, [status, dbUser,session?.user]);
+  }, [status, dbUser, session?.user]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -97,7 +97,15 @@ const Page = () => {
   return (
     <>
       <div className="profile-card">
-        <Image width={100} height={100} src={user.image} alt="Profile Picture" className="profile-pic" />
+        {user.image && (
+          <Image
+            width={100}
+            height={100}
+            src={user?.image || null}
+            alt="Profile Picture"
+            className="profile-pic"
+          />
+        )}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username" className="label">
@@ -143,21 +151,23 @@ const Page = () => {
           </div>
         </form>
       </div>
-        {!isEditing && (
-          <div className="button-group">
-            <button
-              onClick={() => {
-                const sure = confirm("Are you sure you want to logout?\nyou can definentely read your books later");
-                if (sure){
-                  signOut({ callbackUrl: '/' })
-                }
-              }}
-              className="button logout-button"
-            >
-              logout
-            </button>
-          </div>
-        )}
+      {!isEditing && (
+        <div className="button-group">
+          <button
+            onClick={() => {
+              const sure = confirm(
+                "Are you sure you want to logout?\nyou can definentely read your books later"
+              );
+              if (sure) {
+                signOut({ callbackUrl: "/" });
+              }
+            }}
+            className="button logout-button"
+          >
+            logout
+          </button>
+        </div>
+      )}
     </>
   );
 };

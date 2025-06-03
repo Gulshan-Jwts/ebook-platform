@@ -73,9 +73,10 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
 
     fetchPDFChunks();
     return () => {
-      if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
-    };
-  }, [bookId,pdfBlobUrl]);
+    if (pdfBlobUrl) {
+      URL.revokeObjectURL(pdfBlobUrl);
+    }}
+  }, [bookId]);
 
   useEffect(() => {
     const handleContextMenu = (e) => e.preventDefault();
@@ -85,7 +86,6 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
-    setCurrentPage(1);
   };
 
   const handleTouchStart = (e) => {
@@ -157,23 +157,21 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
             style={styles.pdfContainer}
           >
             <Document file={pdfBlobUrl} onLoadSuccess={onDocumentLoadSuccess}>
-              <motion.div
-                key={currentPage}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                variants={pageVariants}
-                transition={{ duration: 0.3 }}
+              <div
               >
                 <Page
                   pageNumber={currentPage}
-                  width={fitToScreen ? window.innerWidth - 40 : undefined}
+                  width={
+                    fitToScreen
+                      ? window.innerWidth - (window.innerWidth / 100) * 20
+                      : undefined
+                  }
                   scale={fitToScreen ? undefined : zoomLevel}
                   renderTextLayer={false}
                   renderAnnotationLayer={false}
                   style={styles.page}
                 />
-              </motion.div>
+              </div>
             </Document>
           </div>
 
@@ -229,7 +227,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap:"2REM",
+    gap: "2REM",
     backgroundColor: "#252627",
     borderRadius: "8px",
     padding: "10px 20px",
@@ -334,10 +332,9 @@ const styles = {
     margin: "2rem 0",
     display: "flex",
     justifyContent: "center",
-    width: "100%",
+    width: "80vw",
     MaxHeight: "80vh",
     overflowY: "auto",
-    maxWidth: "1200px",
     padding: "10px",
     backgroundColor: "#1e1e1e",
     borderRadius: "8px",
@@ -350,7 +347,7 @@ const styles = {
     position: "fixed",
     top: "calc(100svh - 10vh)",
     width: "100%",
-    height:"10vh",
+    height: "10vh",
     left: 0,
     right: 0,
     display: "flex",

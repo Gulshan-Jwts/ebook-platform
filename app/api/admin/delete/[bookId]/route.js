@@ -20,7 +20,9 @@ export async function DELETE(request, { params }) {
 
     await connectMongo();
 
-    const bookId = await params.bookId;
+    params = await params || {};
+
+    const bookId = params.bookId;
 
     const deletedBook = await Book.findByIdAndDelete(bookId);
 

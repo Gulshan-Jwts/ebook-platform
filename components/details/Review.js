@@ -151,7 +151,7 @@ const Review = ({ book }) => {
                   <Image
                   width={50}
                   height={50}
-                    src={review.from.avatar || "/api/placeholder/50/50"}
+                    src={review.from.avatar || "/placeholder.jpeg"}
                     alt="Reviewer Avatar"
                     className="reviewer-avatar"
                   />

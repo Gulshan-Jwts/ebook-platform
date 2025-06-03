@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import "@/stylesheets/adminLogin.css";
+import Link from "next/link";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -45,7 +46,6 @@ const AdminLogin = () => {
 
   return (
     <div className="container">
-      <main className="main">
         {message && (
           <div
             className={
@@ -55,6 +55,10 @@ const AdminLogin = () => {
             }
           >
             {message}
+            {
+              messageType === "success"
+                && <Link href="/admin/dashboard" className="dashboard-link">Go to Dashboard</Link>
+            }
           </div>
         )}
 
@@ -99,7 +103,6 @@ const AdminLogin = () => {
             </button>
           </form>
         </section>
-      </main>
     </div>
   );
 };

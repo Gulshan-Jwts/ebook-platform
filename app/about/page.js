@@ -72,7 +72,7 @@ const Page = () => {
           <div className="section-content">
             <div className="section-image">
               <Image
-                src="/images/author.jpg"
+                src="/images/author.png"
                 alt="Naveen Kewat"
                 width={200}
                 height={200}
@@ -90,18 +90,11 @@ const Page = () => {
                 making a positive impact.
               </p>
               <div className="contact-links">
-                <Link
-                  href="mailto:naveen@example.com"
+                <h3
                   className="contact-button"
                 >
-                  Email Naveen
-                </Link>
-                <Link
-                  href="https://twitter.com/naveenkewat"
-                  className="contact-button"
-                >
-                  Follow on Twitter
-                </Link>
+                  anjaan__2025
+                </h3>
               </div>
             </div>
           </div>
@@ -116,8 +109,8 @@ const Page = () => {
           <div className="section-content">
             <div className="section-image">
               <Image
-                src="/images/developer.jpg"
-                alt="Gulshan"
+                src="/images/chhaka.jpg"
+                alt="Prince"
                 width={200}
                 height={200}
                 className="profile-image"
@@ -125,27 +118,20 @@ const Page = () => {
             </div>
             <div className="section-text">
               <p>
-                Gulshan is the talented developer behind this website, bringing
+                Prince is the talented developer behind this website, bringing
                 expertise in web development and backend technologies.
                 Proficient in the MERN stack (MongoDB, Express.js, React,
-                Node.js), Gulshan ensures a robust and scalable platform. His
+                Node.js), Prince ensures a robust and scalable platform. His
                 skills in animation libraries like Framer Motion and GSAP add a
                 polished and interactive touch to the user experience, making
                 the site both functional and visually appealing.
               </p>
               <div className="contact-links">
-                <Link
-                  href="mailto:gulshan@example.com"
+                <h3
                   className="contact-button"
                 >
-                  Email Gulshan
-                </Link>
-                <Link
-                  href="https://github.com/gulshan"
-                  className="contact-button"
-                >
-                  View GitHub
-                </Link>
+                  popzen
+                </h3>
               </div>
             </div>
           </div>

@@ -1,14 +1,8 @@
 .container {
   max-width: 1280px;
+  width: 100vw;
   margin: 0 auto;
   padding: 16px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
 }
 
 .back-link {
@@ -49,7 +43,8 @@
 }
 
 .login-section {
-  width: 100%;
+  width: 80vw;
+  margin: 0 auto;
   max-width: 448px;
 }
 

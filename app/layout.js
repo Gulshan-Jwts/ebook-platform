@@ -1,4 +1,3 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar.js";
 import "@/stylesheets/detail.css";
@@ -8,16 +7,6 @@ import Footer from "@/components/Footer.js";
 import SessionWrapper from "@/components/SessionWrapper";
 import NextTopLoader from "nextjs-toploader";
 import Script from "next/script";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "Create Next App",
@@ -31,7 +20,7 @@ export default function RootLayout({ children }) {
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive"/>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`antialiased`}
       >
         <SessionWrapper>
           <NextTopLoader
