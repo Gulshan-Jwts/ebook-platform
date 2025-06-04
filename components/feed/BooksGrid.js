@@ -17,7 +17,7 @@ const BooksGrid = ({ books, isLoading }) => {
                 <Image
                   width={200}
                   height={300}
-                  src={books[key].image || "/placeholder.jpg"}
+                  src={books[key].image || "/placeholder.jpeg"}
                   alt={`${books[key].title} Book Cover`}
                 />
               </Link>

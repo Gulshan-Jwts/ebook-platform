@@ -177,7 +177,7 @@ const Review = ({ book }) => {
                   ))}
                 </div>
                 {review.title && <p className="review-title">{review.title}</p>}
-                <p className="review-text">&quote;{review.message}&quote;</p>
+                <p className="review-text">&ldquo;{review.message}&ldquo;</p>
               </div>
             ))}
           </div>

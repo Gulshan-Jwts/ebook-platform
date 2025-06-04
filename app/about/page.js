@@ -72,7 +72,7 @@ const Page = () => {
           <div className="section-content">
             <div className="section-image">
               <Image
-                src="/images/author.png"
+                src="/author.png"
                 alt="Naveen Kewat"
                 width={200}
                 height={200}
@@ -109,7 +109,7 @@ const Page = () => {
           <div className="section-content">
             <div className="section-image">
               <Image
-                src="/images/chhaka.jpg"
+                src="/chhaka.jpg"
                 alt="Prince"
                 width={200}
                 height={200}

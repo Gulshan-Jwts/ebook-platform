@@ -16,7 +16,7 @@ const Hero = ({ book, isLoading }) => {
         ) : (
           <>
             <h1>{book?.title || "Book Title"}</h1>
-            <div className="hero-tagline">&quot;Grab it before it rules you! 👑&quot;</div>
+            <div className="hero-tagline">&ldquo;Grab it before it rules you! 👑&ldquo;</div>
             <Link href={`/book/details/${book?._id || "#"}`} className="cta-button">
               BUY NOW
             </Link>
@@ -31,7 +31,7 @@ const Hero = ({ book, isLoading }) => {
             <Image
               width={200}
               height={300}
-              src={book?.image || "/placeholder.jpg"}
+              src={book?.image || "/placeholder.jpeg"}
               alt={`${book?.title || "Book"} Book Cover`}
               className="book-cover"
             />

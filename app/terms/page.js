@@ -33,7 +33,7 @@ const TermsPage = () => {
         >
           <h2 className="section-title">Introduction</h2>
           <p className="section-text">
-            Welcome to Naveen Kewat E-books! These Terms & Conditions ("Terms") govern your use of our website and the purchase of digital e-books from us. By accessing or using our services, you agree to be bound by these Terms. Please read them carefully.
+            Welcome to Naveen Kewat E-books! These Terms & Conditions (&ldquo;Terms&ldquo;) govern your use of our website and the purchase of digital e-books from us. By accessing or using our services, you agree to be bound by these Terms. Please read them carefully.
           </p>
         </motion.section>
 
