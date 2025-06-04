@@ -336,7 +336,7 @@ header {
 }
 
 .book-card {
-  height: clamp(400px, 50vw, 500px);
+  height: clamp(350px, 33vw, 500px);
   background: linear-gradient(
     135deg,
     #2e4057 0%,
@@ -447,7 +447,7 @@ header {
 
 /* Library Page Specific Styles */
 .library-main .book-card {
-  height: clamp(350px, 45vw, 400px);
+  height: clamp(350px, 50vw, 420px);
   background: linear-gradient(135deg, #2e4057, #1c2526);
   animation: none;
   border-radius: 15px;
@@ -975,7 +975,7 @@ footer {
     grid-template-columns: 1fr;
   }
   .book-card {
-    height: clamp(400px, 65vw, 320px);
+    height: clamp(65vw, 350px, 70vw);
   }
 
   .book-title {
@@ -1044,6 +1044,6 @@ footer {
   }
 
   .library-main .book-card {
-    height: clamp(300px, 55vw, 350px);
+    height: clamp(70vw, 350px, 130vw);
   }
 }

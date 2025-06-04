@@ -25,7 +25,6 @@ const Page = () => {
 
   useEffect(() => {
     const user = session?.user;
-    console.log(dbUser, "data");
     if (user && dbUser) {
       setUser({
         image: user.image,
@@ -107,7 +106,7 @@ const Page = () => {
           />
         )}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="profile-form-group">
             <label htmlFor="username" className="label">
               User ID
             </label>
@@ -121,7 +120,7 @@ const Page = () => {
               className={`input ${isEditing ? "" : "disabled"}`}
             />
           </div>
-          <div className="form-group">
+          <div className="profile-form-group">
             <label htmlFor="name" className="label">
               Name
             </label>

@@ -73,7 +73,7 @@ const Review = ({ book }) => {
               </p>
             ) : (
               <form onSubmit={handleSubmit} className="reviews-form">
-                <div className="form-group">
+                <div className="review-form-group">
                   <div className="star-rating">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <svg
@@ -103,7 +103,7 @@ const Review = ({ book }) => {
                     ))}
                   </div>
                 </div>
-                <div className="form-group">
+                <div className="review-form-group">
                   <input
                     id="review-title"
                     type="text"
@@ -113,7 +113,7 @@ const Review = ({ book }) => {
                     disabled={submitting}
                   />
                 </div>
-                <div className="form-group">
+                <div className="review-form-group">
                   <textarea
                     id="review-message"
                     value={message}

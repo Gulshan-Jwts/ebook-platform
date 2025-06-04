@@ -96,7 +96,19 @@ const TermsPage = () => {
           initial="initial"
           animate="animate"
         >
-          <h2 className="section-title">5. Account Termination</h2>
+          <h2 className="section-title">5. <b>Refund policy</b></h2>
+          <p className="section-text">
+            Due to the nature of digital products, we do not offer refunds or exchanges on e-books once they have been purchased and accessed. If you encounter any issues with your purchase, please contact us within 7 days of purchase, and we will do our best to assist you.
+          </p>
+        </motion.section>
+
+        <motion.section 
+          className="section-block"
+          variants={fadeIn}
+          initial="initial"
+          animate="animate"
+        >
+          <h2 className="section-title">6. Account Termination</h2>
           <p className="section-text">
             We reserve the right to suspend or terminate your account and access to our services, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms. Upon termination, your right to use the services will immediately cease. If you wish to terminate your account, you may simply discontinue using the services.
           </p>
@@ -108,7 +120,7 @@ const TermsPage = () => {
           initial="initial"
           animate="animate"
         >
-          <h2 className="section-title">6. Limitation of Liability</h2>
+          <h2 className="section-title">7. Limitation of Liability</h2>
           <p className="section-text">
             In no event shall Naveen Kewat E-books, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from 
           </p>
@@ -126,13 +138,14 @@ const TermsPage = () => {
           initial="initial"
           animate="animate"
         >
-          <h2 className="section-title">7. Contact Information</h2>
+          <h2 className="section-title">8. Contact Information</h2>
           <p className="section-text">
             If you have any questions about these Terms, please contact us:
           </p>
           <ul className="section-list">
-            <li>Email: <a href="mailto:[email protected]" className="section-link">[email protected]</a></li>
-            <li>Website: <Link href="http://naveenkewatebooks.in" className="section-link">naveenkewatebooks.in</Link></li>
+            <li>Email: naveenkewat1144@gmail.com</li>
+            <li>Phone: +91 70730 36234</li>
+            <li>Website: <Link href="/">www.themegahub.online</Link></li>
           </ul>
         </motion.section>
 
@@ -146,7 +159,7 @@ const TermsPage = () => {
           <p className="section-text">
             These Terms & Conditions are crucial for both you and Naveen Kewat E-books. They clearly define the rules for using our website and purchasing our e-books, protecting your rights as a customer and outlining our responsibilities. Understanding them helps ensure a smooth and fair experience for everyone.
           </p>
-          <button className="got-it-button">Got It!</button>
+          <button className="got-it-button" onClick={()=>{alert("thank you for visiting and reading, Happy to see you here")}}>Got It!</button>
         </motion.section>
       </main>
     </div>

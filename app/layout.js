@@ -12,7 +12,9 @@ export const metadata = {
   title: "Naveen Kewat - eBook Store",
   keywords: "Naveen Kewat, eBook Store, Self-Help, Books, Online Store, Buy Books",
   description: "Naveen Kewat's eBook Store offers a wide range of self-help books to empower and inspire you. Shop online for the best collection of books.",
-  Icon: "/favicon.ico",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {

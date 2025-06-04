@@ -675,7 +675,7 @@ header {
   gap: 1.5rem;
 }
 
-.form-group {
+.review-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -708,15 +708,16 @@ header {
   margin-bottom: 1rem;
 }
 
-.form-group label {
+.review-form-group label {
   font-size: 1rem;
   color: #f4c430;
   font-weight: 600;
   text-transform: uppercase;
 }
 
-.form-group input,
-.form-group textarea {
+.review-form-group input,
+.review-form-group textarea {
+  width: 80vw;
   padding: 0.8rem;
   border-radius: 8px;
   border: 1px solid rgba(244, 196, 48, 0.3);
@@ -727,13 +728,13 @@ header {
   transition: box-shadow 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.review-form-group input:focus,
+.review-form-group textarea:focus {
   border-color: #f4c430;
   box-shadow: 0 0 10px rgba(244, 196, 48, 0.3);
 }
 
-.form-group textarea {
+.review-form-group textarea {
   resize: vertical;
   min-height: 100px;
 }
