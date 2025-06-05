@@ -26,9 +26,12 @@ export const authOptions = {
 
         if (!existingUser) {
           const username = user.email.split("@")[0];
+          const cleaned = username.replace(/[0-9]/g, "").replace(/\s+/g, "");
+          const firstName = cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
           const newUser = await User.create({
             email: user.email,
             username,
+            firstName
           });
         }
 

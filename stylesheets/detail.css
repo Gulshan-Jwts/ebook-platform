@@ -27,6 +27,10 @@ header {
   backdrop-filter: blur(10px);
 }
 
+header .logo-image{
+  border-radius: 8px;
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -325,11 +329,15 @@ header {
 .reviews-container {
   display: flex;
   gap: 2rem;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  gap: 1.5rem;
   overflow-x: auto;
-  padding: 1rem 0;
+  padding: 1rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  scroll-snap-type: X mandatory;
+  scroll-behavior: smooth;
+  scroll-margin: 1rem;
 }
 
 .reviews-container::-webkit-scrollbar {
@@ -346,6 +354,7 @@ header {
   transition: transform 0.3s ease;
   position: relative;
   overflow: hidden;
+  scroll-snap-align: start;
 }
 
 .review-card::before {
@@ -672,12 +681,14 @@ header {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1.5rem;
 }
 
 .review-form-group {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -717,7 +728,7 @@ header {
 
 .review-form-group input,
 .review-form-group textarea {
-  width: 80vw;
+  width: 70vw;
   padding: 0.8rem;
   border-radius: 8px;
   border: 1px solid rgba(244, 196, 48, 0.3);

@@ -28,7 +28,7 @@ const UserLogin = () => {
       <div className="login-form flex flex-col gap-4 mt-4">
         <button
           onClick={() => signIn("google")}
-          className="flex items-center justify-center gap-2 py-2 px-4 bg-black text-white rounded-md shadow hover:bg-gray-900 transition"
+          className="login-provider flex items-center justify-center gap-2 py-4 px-4 bg-black text-white shadow hover:bg-gray-900 transition"
         >
           <svg x="0px" y="0px" width="30" height="30" viewBox="0 0 48 48">
             <path
@@ -53,7 +53,7 @@ const UserLogin = () => {
 
         <button
           onClick={() => signIn("github")}
-          className="flex items-center justify-center gap-2 py-2 px-4 bg-black text-white rounded-md shadow hover:bg-gray-900 transition"
+          className="login-provider flex items-center justify-center gap-2 py-2 px-4 bg-black text-white shadow hover:bg-gray-900 transition"
         >
           <svg x="0px" y="0px" width="30" height="30" viewBox="0 0 48 48">
             <linearGradient

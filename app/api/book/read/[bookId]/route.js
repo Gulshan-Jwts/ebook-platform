@@ -62,9 +62,16 @@ export async function POST(req) {
         y: height / 2 - textHeight / 2,
         size: fontSize,
         font,
-        color: rgb(0.5, 0.5, 0.5, 0.3),
+        color: rgb(1, 0.5, 0.5, 0.5),
         opacity: 0.3,
-        rotate: { type: 'degrees', angle: 45 }, 
+      });
+      page.drawText("by Naveen Kewat", {
+        x: width / 2 - textWidth / 2,
+        y: (height / 2 - textHeight / 2) + textHeight + 50,
+        size: fontSize,
+        font,
+        color: rgb(1, 0.5, 0.5, 0.5),
+        opacity: 0.3,
       });
     }
 

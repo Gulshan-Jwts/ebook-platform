@@ -26,6 +26,7 @@ const Page = () => {
   useEffect(() => {
     const user = session?.user;
     if (user && dbUser) {
+      console.log(user, dbUser);
       setUser({
         image: user.image,
         name: dbUser.firstName || "",

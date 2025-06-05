@@ -47,7 +47,7 @@ const Page = () => {
                   </>
                 ) : (
                   <>
-                    <h3 className="book-title">{book.title}</h3>
+                    <h3 className="book-title" title={book.title}>{book.title}</h3>
                     <Link href={`/book/details/${book._id}`}>
                       <button className="buy-button">View more</button>
                     </Link>
@@ -74,7 +74,7 @@ const Page = () => {
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
-          <p className="empty-library-message">Your Cart is empty.</p>
+          <p className="empty-library-message">Your Cart is empty. try to refresh</p>
           <Link href="/" className="cta-button">
             Explore Books
           </Link>

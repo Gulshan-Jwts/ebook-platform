@@ -95,7 +95,9 @@ const Page = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,pdf: formData.pdfUrl,
+          image: formData.imageUrl,}),
       });
 
       const data = await response.json();
@@ -373,7 +375,7 @@ const Page = () => {
                       variants={expandVariants}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="book-prices">
+                      <div className="book-prices-list">
                         <div className="book-detail-price">
                           <strong>Old Price:</strong> ₹{book.oldPrice}
                         </div>

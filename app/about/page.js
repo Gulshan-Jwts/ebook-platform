@@ -110,7 +110,7 @@ const Page = () => {
             <div className="section-image">
               <Image
                 src="/chhaka.jpg"
-                alt="Prince"
+                alt="Chakka Prince"
                 width={200}
                 height={200}
                 className="profile-image"

@@ -24,6 +24,8 @@ export async function PUT(request, { params }) {
     const bookId = await params.bookId;
     const updates = await request.json();
 
+    console.log(updates)
+
     const updatedBook = await Book.findByIdAndUpdate(bookId, updates, {
       new: true,
     });
