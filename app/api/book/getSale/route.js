@@ -21,25 +21,16 @@ export async function GET(request) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
     await connectMongo();
-
-    const users = await User.find({});
-    const allPurchasedIds = users.flatMap((user) => user.purchasedList);
-
+    const sales = await Sale.find({});
     const saleMap = {};
     let totalSales = 0;
     let totalRevenue = 0;
 
-    for (const bookId of allPurchasedIds) {
+    for (const sale of sales) {
+      const bookId = sale.consumer;
       saleMap[bookId] = (saleMap[bookId] || 0) + 1;
       totalSales++;
-    }
-
-    const books = await Book.find({ _id: { $in: Object.keys(saleMap) } });
-
-    for (const book of books) {
-      const count = saleMap[book._id.toString()] || 0;
-      const price = parseFloat(book.currentPrice);
-      totalRevenue += count * price;
+      totalRevenue += parseFloat(sale.amount);
     }
 
     return NextResponse.json({
@@ -47,6 +38,7 @@ export async function GET(request) {
       totalSales,
       totalRevenue: Math.round(totalRevenue),
     });
+    
   } catch (error) {
     console.error("Error in getSale route:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

@@ -13,9 +13,26 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [fitToScreen, setFitToScreen] = useState(true);
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
   const startX = useRef(0);
+  const startY = useRef(0);
+  const isPanning = useRef(false);
+  const initialDistance = useRef(null);
+  const initialZoom = useRef(1);
+  const initialPan = useRef({ x: 0, y: 0 });
+  const lastTouchTime = useRef(0);
 
+  // Save current page to localStorage whenever it changes
+
+  useEffect(() => {
+    const savedPage = localStorage.getItem(`book_${bookId}_currentPage`);
+    if (savedPage && currentPage !== parseInt(savedPage, 10)) {
+      setCurrentPage(parseInt(savedPage, 10));
+    }
+  }, [bookId]);
+
+  // Fetch PDF chunks
   useEffect(() => {
     const fetchPDFChunks = async () => {
       const chunkSize = 1024 * 1024;
@@ -73,11 +90,13 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
 
     fetchPDFChunks();
     return () => {
-    if (pdfBlobUrl) {
-      URL.revokeObjectURL(pdfBlobUrl);
-    }}
+      if (pdfBlobUrl) {
+        URL.revokeObjectURL(pdfBlobUrl);
+      }
+    };
   }, [bookId]);
 
+  // Disable context menu
   useEffect(() => {
     const handleContextMenu = (e) => e.preventDefault();
     document.addEventListener("contextmenu", handleContextMenu);
@@ -88,19 +107,95 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
     setNumPages(numPages);
   };
 
+  // Calculate distance between two touches for pinch-to-zoom
+  const getTouchDistance = (touches) => {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  // Get midpoint between two touches
+  const getTouchMidpoint = (touches) => {
+    return {
+      x: (touches[0].clientX + touches[1].clientX) / 2,
+      y: (touches[0].clientY + touches[1].clientY) / 2,
+    };
+  };
+
   const handleTouchStart = (e) => {
-    startX.current = e.touches[0].clientX;
+    if (e.touches.length === 1) {
+      startX.current = e.touches[0].clientX;
+      startY.current = e.touches[0].clientY;
+      lastTouchTime.current = Date.now();
+      isPanning.current = zoomLevel > 1 || !fitToScreen;
+    } else if (e.touches.length === 2) {
+      e.preventDefault();
+      isPanning.current = false;
+      initialDistance.current = getTouchDistance(e.touches);
+      initialZoom.current = zoomLevel;
+      initialPan.current = { ...panOffset };
+      const midpoint = getTouchMidpoint(e.touches);
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const relativeX = midpoint.x - containerRect.left;
+      const relativeY = midpoint.y - containerRect.top;
+      initialPan.current = {
+        x: panOffset.x - relativeX,
+        y: panOffset.y - relativeY,
+      };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 1 && isPanning.current) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - startX.current;
+      const dy = e.touches[0].clientY - startY.current;
+      setPanOffset({ x: panOffset.x + dx, y: panOffset.y + dy });
+      startX.current = e.touches[0].clientX;
+      startY.current = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+      e.preventDefault();
+      const currentDistance = getTouchDistance(e.touches);
+      const scaleChange = currentDistance / initialDistance.current;
+      const newZoom = Math.max(
+        0.5,
+        Math.min(initialZoom.current * scaleChange, 3)
+      );
+      setZoomLevel(newZoom);
+
+      const midpoint = getTouchMidpoint(e.touches);
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const relativeX = midpoint.x - containerRect.left;
+      const relativeY = midpoint.y - containerRect.top;
+      const newPanX =
+        initialPan.current.x + relativeX * (1 - newZoom / initialZoom.current);
+      const newPanY =
+        initialPan.current.y + relativeY * (1 - newZoom / initialZoom.current);
+      setPanOffset({ x: newPanX, y: newPanY });
+    }
   };
 
   const handleTouchEnd = (e) => {
-    const diff = startX.current - e.changedTouches[0].clientX;
-    if (diff > 50) goToNextPage();
-    else if (diff < -50) goToPrevPage();
+    if (e.changedTouches.length === 1 && !isPanning.current) {
+      const diffX = startX.current - e.changedTouches[0].clientX;
+      const diffTime = Date.now() - lastTouchTime.current;
+      if (Math.abs(diffX) > 50 && diffTime < 300) {
+        if (diffX > 0) goToNextPage();
+        else goToPrevPage();
+      }
+    }
+    isPanning.current = false;
+    initialDistance.current = null;
   };
 
-  const goToPrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const goToNextPage = () =>
+  const goToPrevPage = () => {
+    localStorage.setItem(`book_${bookId}_currentPage`, Math.min(currentPage - 1, 1).toString());
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+  const goToNextPage = () => {
+    localStorage.setItem(`book_${bookId}_currentPage`, Math.min(currentPage + 1, numPages).toString());
     setCurrentPage((prev) => Math.min(prev + 1, numPages));
+  };
 
   const pageVariants = {
     initial: { opacity: 0, x: 20 },
@@ -122,7 +217,11 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
                   ...styles.toggleSwitch,
                   backgroundColor: fitToScreen ? "#007bff" : "#ccc",
                 }}
-                onClick={() => setFitToScreen(!fitToScreen)}
+                onClick={() => {
+                  setFitToScreen(!fitToScreen);
+                  setZoomLevel(1);
+                  setPanOffset({ x: 0, y: 0 });
+                }}
               >
                 <motion.div
                   style={styles.toggleCircle}
@@ -139,7 +238,10 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
                   max="3"
                   step="0.1"
                   value={zoomLevel}
-                  onChange={(e) => setZoomLevel(parseFloat(e.target.value))}
+                  onChange={(e) => {
+                    setZoomLevel(parseFloat(e.target.value));
+                    setPanOffset({ x: 0, y: 0 });
+                  }}
                   disabled={fitToScreen}
                   style={styles.slider}
                 />
@@ -153,11 +255,19 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
           <div
             ref={containerRef}
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             style={styles.pdfContainer}
           >
             <Document file={pdfBlobUrl} onLoadSuccess={onDocumentLoadSuccess}>
-              <div
+              <motion.div
+                style={{
+                  transform: `translate(${panOffset.x}px, ${panOffset.y}px)`,
+                }}
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
               >
                 <Page
                   pageNumber={currentPage}
@@ -171,7 +281,7 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
                   renderAnnotationLayer={false}
                   style={styles.page}
                 />
-              </div>
+              </motion.div>
             </Document>
           </div>
 
@@ -227,7 +337,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: "2REM",
+    gap: "2rem",
     backgroundColor: "#252627",
     borderRadius: "8px",
     padding: "10px 20px",
@@ -262,11 +372,6 @@ const styles = {
     top: "3px",
     left: "3px",
     boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-  },
-  zoomLabel: {
-    fontSize: "14px",
-    color: "#ccc",
-    fontWeight: "500",
   },
   sliderContainer: {
     position: "relative",
@@ -333,12 +438,13 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     width: "80vw",
-    MaxHeight: "80vh",
-    overflowY: "auto",
+    maxHeight: "80vh",
+    overflow: "hidden",
     padding: "10px",
     backgroundColor: "#1e1e1e",
     borderRadius: "8px",
     boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+    position: "relative",
   },
   page: {
     transition: "transform 0.3s ease",

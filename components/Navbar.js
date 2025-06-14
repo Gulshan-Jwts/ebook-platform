@@ -7,8 +7,10 @@ import Image from "next/image";
 const Navbar = () => {
   const { data: session, status } = useSession();
 
-  const { dbUser } = useData();
-  const cartLength = dbUser?.cartList.length;
+  const { dbUser,books } = useData();
+  const cartLength = dbUser?.cartList?.filter((id) =>
+    books.some((book) => book._id === id)
+  ).length;
 
   return (
     <header>
