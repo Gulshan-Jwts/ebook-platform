@@ -129,7 +129,6 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
       lastTouchTime.current = Date.now();
       isPanning.current = zoomLevel > 1 || !fitToScreen;
     } else if (e.touches.length === 2) {
-      e.preventDefault();
       isPanning.current = false;
       initialDistance.current = getTouchDistance(e.touches);
       initialZoom.current = zoomLevel;
@@ -147,14 +146,12 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
 
   const handleTouchMove = (e) => {
     if (e.touches.length === 1 && isPanning.current) {
-      e.preventDefault();
       const dx = e.touches[0].clientX - startX.current;
       const dy = e.touches[0].clientY - startY.current;
       setPanOffset({ x: panOffset.x + dx, y: panOffset.y + dy });
       startX.current = e.touches[0].clientX;
       startY.current = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
-      e.preventDefault();
       const currentDistance = getTouchDistance(e.touches);
       const scaleChange = currentDistance / initialDistance.current;
       const newZoom = Math.max(
