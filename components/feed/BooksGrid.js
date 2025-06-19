@@ -34,8 +34,8 @@ const BooksGrid = ({ books, isLoading }) => {
               <>
                 <h3 className="book-title">{books[key].title}</h3>
                 <div className="book-price-grid">
-                  <span className="old-price">{books[key].oldPrice}</span>
-                  <span className="current-price">{books[key].currentPrice}</span>
+                  <span className="old-price">&#8377;{books[key].oldPrice}</span>
+                  <span className="current-price">&#8377;{books[key].currentPrice}</span>
                 </div>
                 <Link href={`/book/details/${books[key]._id}`}>
                   <button className="buy-button">BUY NOW</button>

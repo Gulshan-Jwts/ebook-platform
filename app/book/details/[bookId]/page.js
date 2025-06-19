@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Review from "@/components/details/Review";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const params = useParams();
+    const { data: session } = useSession();
 
   const { books, dbUser } = useData();
   const bookId = params.bookId;
@@ -24,7 +26,7 @@ const Page = () => {
       return;
     }
 
-    if (!dbUser) {
+    if (!dbUser && !session) {
       router.push("/user/login");
       return;
     }
@@ -100,8 +102,8 @@ const Page = () => {
               </span>
             </div>
             <div className="price">
-              <span className="old-price">{book.oldPrice}</span>
-              <span className="current-price">{book.currentPrice}</span>
+              <span className="old-price">&#8377;{book.oldPrice}</span>
+              <span className="current-price">&#8377;{book.currentPrice}</span>
             </div>
           </div>
         </div>
@@ -127,6 +129,10 @@ const Page = () => {
             ) : (
               <button
                 onClick={async () => {
+                  if (!session) {
+                    router.push("/");
+                    return
+                  }
                   const res = await fetch(`/api/book/addToCart/${book._id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },

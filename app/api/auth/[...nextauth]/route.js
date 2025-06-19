@@ -33,6 +33,7 @@ export const authOptions = {
             username,
             firstName
           });
+          console.log("user created",newUser)
         }
 
         return true;

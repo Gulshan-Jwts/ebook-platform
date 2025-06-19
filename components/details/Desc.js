@@ -35,7 +35,7 @@ const Desc = ({book,averageRating}) => {
 						</div>
 						<div className='price'>
 							<span className='old-price'>
-								<s>{book.oldPrice}</s>
+								<s>&#8377;{book.oldPrice}</s>
 							</span>
 							<span className='current-price'> {book.currentPrice}</span>
 						</div>

@@ -45,8 +45,8 @@ const Hero = ({ book, isLoading }) => {
             </>
           ) : (
             <>
-              <span className="old-price">{book?.oldPrice || "0.00"}</span>
-              <span className="current-price">{book?.currentPrice || "0.00"}</span>
+              <span className="old-price">&#8377;{book?.oldPrice || "0.00"}</span>
+              <span className="current-price">&#8377;{book?.currentPrice || "0.00"}</span>
             </>
           )}
         </div>
