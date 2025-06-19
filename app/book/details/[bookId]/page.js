@@ -130,7 +130,7 @@ const Page = () => {
               <button
                 onClick={async () => {
                   if (!session) {
-                    router.push("/");
+                    router.push("/user/login");
                     return
                   }
                   const res = await fetch(`/api/book/addToCart/${book._id}`, {
