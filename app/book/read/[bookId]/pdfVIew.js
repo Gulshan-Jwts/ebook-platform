@@ -1,8 +1,10 @@
+// components/PDFViewerWithChunkedLoad.js
 "use client";
 
 import { useEffect, useState, useRef } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -13,18 +15,10 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [fitToScreen, setFitToScreen] = useState(true);
-  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
-  const startX = useRef(0);
-  const startY = useRef(0);
-  const isPanning = useRef(false);
-  const initialDistance = useRef(null);
-  const initialZoom = useRef(1);
-  const initialPan = useRef({ x: 0, y: 0 });
-  const lastTouchTime = useRef(0);
+  const lastSwipeTime = useRef(0);
 
-  // Save current page to localStorage whenever it changes
-
+  // Save current page to localStorage
   useEffect(() => {
     const savedPage = localStorage.getItem(`book_${bookId}_currentPage`);
     if (savedPage && currentPage !== parseInt(savedPage, 10)) {
@@ -90,9 +84,7 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
 
     fetchPDFChunks();
     return () => {
-      if (pdfBlobUrl) {
-        URL.revokeObjectURL(pdfBlobUrl);
-      }
+      if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
     };
   }, [bookId]);
 
@@ -107,97 +99,37 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
     setNumPages(numPages);
   };
 
-  // Calculate distance between two touches for pinch-to-zoom
-  const getTouchDistance = (touches) => {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  // Get midpoint between two touches
-  const getTouchMidpoint = (touches) => {
-    return {
-      x: (touches[0].clientX + touches[1].clientX) / 2,
-      y: (touches[0].clientY + touches[1].clientY) / 2,
-    };
-  };
-
-  const handleTouchStart = (e) => {
-    if (e.touches.length === 1) {
-      startX.current = e.touches[0].clientX;
-      startY.current = e.touches[0].clientY;
-      lastTouchTime.current = Date.now();
-      isPanning.current = zoomLevel > 1 || !fitToScreen;
-    } else if (e.touches.length === 2) {
-      isPanning.current = false;
-      initialDistance.current = getTouchDistance(e.touches);
-      initialZoom.current = zoomLevel;
-      initialPan.current = { ...panOffset };
-      const midpoint = getTouchMidpoint(e.touches);
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const relativeX = midpoint.x - containerRect.left;
-      const relativeY = midpoint.y - containerRect.top;
-      initialPan.current = {
-        x: panOffset.x - relativeX,
-        y: panOffset.y - relativeY,
-      };
-    }
-  };
-
-  const handleTouchMove = (e) => {
-    if (e.touches.length === 1 && isPanning.current) {
-      const dx = e.touches[0].clientX - startX.current;
-      const dy = e.touches[0].clientY - startY.current;
-      setPanOffset({ x: panOffset.x + dx, y: panOffset.y + dy });
-      startX.current = e.touches[0].clientX;
-      startY.current = e.touches[0].clientY;
-    } else if (e.touches.length === 2) {
-      const currentDistance = getTouchDistance(e.touches);
-      const scaleChange = currentDistance / initialDistance.current;
-      const newZoom = Math.max(
-        0.5,
-        Math.min(initialZoom.current * scaleChange, 3)
-      );
-      setZoomLevel(newZoom);
-
-      const midpoint = getTouchMidpoint(e.touches);
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const relativeX = midpoint.x - containerRect.left;
-      const relativeY = midpoint.y - containerRect.top;
-      const newPanX =
-        initialPan.current.x + relativeX * (1 - newZoom / initialZoom.current);
-      const newPanY =
-        initialPan.current.y + relativeY * (1 - newZoom / initialZoom.current);
-      setPanOffset({ x: newPanX, y: newPanY });
-    }
-  };
-
-  const handleTouchEnd = (e) => {
-    if (e.changedTouches.length === 1 && !isPanning.current) {
-      const diffX = startX.current - e.changedTouches[0].clientX;
-      const diffTime = Date.now() - lastTouchTime.current;
-      if (Math.abs(diffX) > 50 && diffTime < 300) {
-        if (diffX > 0) goToNextPage();
-        else goToPrevPage();
-      }
-    }
-    isPanning.current = false;
-    initialDistance.current = null;
-  };
-
   const goToPrevPage = () => {
-    localStorage.setItem(`book_${bookId}_currentPage`, Math.min(currentPage - 1, 1).toString());
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
+    const newPage = Math.max(currentPage - 1, 1);
+    localStorage.setItem(`book_${bookId}_currentPage`, newPage.toString());
+    setCurrentPage(newPage);
   };
+
   const goToNextPage = () => {
-    localStorage.setItem(`book_${bookId}_currentPage`, Math.min(currentPage + 1, numPages).toString());
-    setCurrentPage((prev) => Math.min(prev + 1, numPages));
+    const newPage = Math.min(currentPage + 1, numPages);
+    localStorage.setItem(`book_${bookId}_currentPage`, newPage.toString());
+    setCurrentPage(newPage);
+  };
+
+  // Handle swipe for page change, prevent during zoom/pan
+  const handleSwipe = ({ event, direction: [dx], velocity, distance }) => {
+    if (
+      fitToScreen ||
+      zoomLevel > 1 ||
+      Date.now() - lastSwipeTime.current < 300
+    )
+      return;
+    if (distance > 50 && velocity > 0.5) {
+      if (dx > 0) goToNextPage();
+      else goToPrevPage();
+      lastSwipeTime.current = Date.now();
+    }
   };
 
   const pageVariants = {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 },
+    initial: { opacity: 0, rotateY: -90, scale: 0.95, transformOrigin: "left" },
+    animate: { opacity: 1, rotateY: 0, scale: 1, transformOrigin: "left" },
+    exit: { opacity: 0, rotateY: 90, scale: 0.95, transformOrigin: "right" },
   };
 
   return (
@@ -208,7 +140,7 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
         <>
           <div style={styles.toolbar}>
             <div style={styles.toolbarGroup}>
-              <span style={styles.toggleLabel}>Fit Screen</span>
+              <span style={styles.toggleLabel}>Fit to Screen</span>
               <div
                 style={{
                   ...styles.toggleSwitch,
@@ -217,12 +149,11 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
                 onClick={() => {
                   setFitToScreen(!fitToScreen);
                   setZoomLevel(1);
-                  setPanOffset({ x: 0, y: 0 });
                 }}
               >
                 <motion.div
                   style={styles.toggleCircle}
-                  animate={{ x: fitToScreen ? "28px" : 0 }}
+                  animate={{ x: fitToScreen ? 20 : 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 />
               </div>
@@ -235,10 +166,7 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
                   max="3"
                   step="0.1"
                   value={zoomLevel}
-                  onChange={(e) => {
-                    setZoomLevel(parseFloat(e.target.value));
-                    setPanOffset({ x: 0, y: 0 });
-                  }}
+                  onChange={(e) => setZoomLevel(parseFloat(e.target.value))}
                   disabled={fitToScreen}
                   style={styles.slider}
                 />
@@ -249,37 +177,51 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
             </div>
           </div>
 
-          <div
-            ref={containerRef}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            style={styles.pdfContainer}
-          >
-            <Document file={pdfBlobUrl} onLoadSuccess={onDocumentLoadSuccess}>
-              <motion.div
-                style={{
-                  transform: `translate(${panOffset.x}px, ${panOffset.y}px)`,
-                }}
-                variants={pageVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                <Page
-                  pageNumber={currentPage}
-                  width={
-                    fitToScreen
-                      ? window.innerWidth - (window.innerWidth / 100) * 20
-                      : undefined
-                  }
-                  scale={fitToScreen ? undefined : zoomLevel}
-                  renderTextLayer={false}
-                  renderAnnotationLayer={false}
-                  style={styles.page}
-                />
-              </motion.div>
-            </Document>
+          <div ref={containerRef} style={styles.pdfContainer}>
+            <TransformWrapper
+              initialScale={fitToScreen ? 1 : zoomLevel}
+              minScale={0.5}
+              maxScale={3}
+              disabled={fitToScreen}
+              onZoom={(ref) => setZoomLevel(ref.state.scale)}
+              onPanningStart={() => (lastSwipeTime.current = Date.now())}
+              onSwipe={handleSwipe}
+              limitToBounds={true}
+              panning={{ disabled: fitToScreen || zoomLevel <= 1 }}
+              pinch={{ disabled: fitToScreen }}
+              wheel={{ disabled: false }}
+            >
+              <TransformComponent>
+                <Document
+                  file={pdfBlobUrl}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentPage}
+                      variants={pageVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                      <Page
+                        pageNumber={currentPage}
+                        width={
+                          fitToScreen
+                            ? window.innerWidth - (window.innerWidth / 100) * 20
+                            : undefined
+                        }
+                        scale={fitToScreen ? undefined : zoomLevel}
+                        renderTextLayer={false}
+                        renderAnnotationLayer={false}
+                        style={styles.page}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                </Document>
+              </TransformComponent>
+            </TransformWrapper>
           </div>
 
           <div style={styles.navBar}>
@@ -434,8 +376,9 @@ const styles = {
     margin: "2rem 0",
     display: "flex",
     justifyContent: "center",
-    width: "80vw",
-    maxHeight: "80vh",
+    width: "90vw",
+    minHeight: "fit-content",
+    maxHeight: "90vh",
     overflow: "hidden",
     padding: "10px",
     backgroundColor: "#1e1e1e",
