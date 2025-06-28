@@ -8,14 +8,14 @@
   "description": "Browse and read self-help books offline!",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
-      "type": "image/png",
+      "src": "/icons/icon-192.jpg",
+      "type": "image/jpeg",
       "sizes": "192x192"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/icons/icon-403.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "403x403"
     }
   ]
 }
