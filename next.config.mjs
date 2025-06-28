@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
+import withPWA from "next-pwa";
+
+const wrapper = withPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+});
+
 const nextConfig = {
   webpack(config) {
     config.module.rules.push({
@@ -34,4 +42,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default wrapper(nextConfig);

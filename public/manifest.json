@@ -1,0 +1,21 @@
+{
+  "name": "eBook Store",
+  "short_name": "eBooks",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1c2526",
+  "theme_color": "#f4c430",
+  "description": "Browse and read self-help books offline!",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

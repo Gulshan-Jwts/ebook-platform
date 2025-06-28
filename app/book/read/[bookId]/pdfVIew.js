@@ -15,6 +15,8 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [fitToScreen, setFitToScreen] = useState(true);
+  const [prevPage, setPrevPage] = useState(2);
+  const [isAnimating, setIsAnimating] = useState(false);
   const containerRef = useRef(null);
   const lastSwipeTime = useRef(0);
 
@@ -25,6 +27,22 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
       setCurrentPage(parseInt(savedPage, 10));
     }
   }, [bookId]);
+
+  async function cachePDF(bookId, blob) {
+    const cache = await caches.open("ebook-cache");
+    const response = new Response(blob, {
+      headers: { "Content-Type": "application/pdf" },
+    });
+    await cache.put(`/cached/${bookId}.pdf`, response);
+  }
+
+  async function loadPDF(bookId) {
+    const cache = await caches.open("ebook-cache");
+    const response = await cache.match(`/cached/${bookId}.pdf`);
+    if (!response) return null;
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+  }
 
   // Fetch PDF chunks
   useEffect(() => {
@@ -78,11 +96,20 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
 
       if (chunks.length > 0) {
         const fullBlob = new Blob(chunks, { type: "application/pdf" });
+        await cachePDF(bookId, fullBlob);
         setPdfBlobUrl(URL.createObjectURL(fullBlob));
       }
     };
 
-    fetchPDFChunks();
+    const init = async () => {
+      const cachedUrl = await loadPDF(bookId);
+      if (cachedUrl) {
+        setPdfBlobUrl(cachedUrl);
+      } else {
+        fetchPDFChunks();
+      }
+    };
+    init();
     return () => {
       if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
     };
@@ -101,35 +128,49 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
 
   const goToPrevPage = () => {
     const newPage = Math.max(currentPage - 1, 1);
-    localStorage.setItem(`book_${bookId}_currentPage`, newPage.toString());
-    setCurrentPage(newPage);
+    if (newPage !== currentPage) {
+      localStorage.setItem(`book_${bookId}_currentPage`, newPage.toString());
+      handlePageChange(newPage);
+    }
   };
 
   const goToNextPage = () => {
     const newPage = Math.min(currentPage + 1, numPages);
-    localStorage.setItem(`book_${bookId}_currentPage`, newPage.toString());
+    if (newPage !== currentPage) {
+      localStorage.setItem(`book_${bookId}_currentPage`, newPage.toString());
+      handlePageChange(newPage);
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (isAnimating || newPage === currentPage) return;
+
+    setIsAnimating(true);
+    setPrevPage(currentPage);
     setCurrentPage(newPage);
   };
 
   // Handle swipe for page change, prevent during zoom/pan
   const handleSwipe = ({ event, direction: [dx], velocity, distance }) => {
-    if (
-      fitToScreen ||
-      zoomLevel > 1 ||
-      Date.now() - lastSwipeTime.current < 300
-    )
-      return;
-    if (distance > 50 && velocity > 0.5) {
-      if (dx > 0) goToNextPage();
-      else goToPrevPage();
-      lastSwipeTime.current = Date.now();
+    if (zoomLevel > 1 || Date.now() - lastSwipeTime.current < 300) return;
+    if (fitToScreen) {
+      if (distance > 50 && velocity > 0.5) {
+        if (dx > 0) goToNextPage();
+        else goToPrevPage();
+        lastSwipeTime.current = Date.now();
+      }
     }
   };
 
   const pageVariants = {
-    initial: { opacity: 0, rotateY: -90, scale: 0.95, transformOrigin: "left" },
-    animate: { opacity: 1, rotateY: 0, scale: 1, transformOrigin: "left" },
-    exit: { opacity: 0, rotateY: 90, scale: 0.95, transformOrigin: "right" },
+    initial: {
+      opacity: 0,
+      rotateY: -90,
+      scale: 0.95,
+      transformOrigin: "right",
+    },
+    animate: { opacity: 1, rotateY: 0, scale: 1, transformOrigin: "right" },
+    exit: { opacity: 0.8, rotateY: -90, scale: 0.95, transformOrigin: "left" },
   };
 
   return (
@@ -199,24 +240,56 @@ export default function PDFViewerWithChunkedLoad({ bookId }) {
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentPage}
-                      variants={pageVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      style={{ perspective: "1000px" }}
                     >
-                      <Page
-                        pageNumber={currentPage}
-                        width={
-                          fitToScreen
-                            ? window.innerWidth - (window.innerWidth / 100) * 20
-                            : undefined
-                        }
-                        scale={fitToScreen ? undefined : zoomLevel}
-                        renderTextLayer={false}
-                        renderAnnotationLayer={false}
-                        style={styles.page}
-                      />
+                      <motion.div
+                        key={`current-${currentPage}`}
+                        variants={pageVariants}
+                        initial="animate"
+                      >
+                        <Page
+                          pageNumber={currentPage}
+                          width={
+                            fitToScreen
+                              ? window.innerWidth -
+                                (window.innerWidth / 100) * 20
+                              : undefined
+                          }
+                          scale={fitToScreen ? undefined : zoomLevel}
+                          renderTextLayer={false}
+                          renderAnnotationLayer={false}
+                          style={styles.page}
+                        />
+                      </motion.div>
+                      {prevPage && (
+                        <motion.div
+                          key={`prev-${prevPage}`}
+                          initial="animate"
+                          animate="exit"
+                          exit="exit"
+                          variants={pageVariants}
+                          transition={{ duration: 0.6 }}
+                          style={{ position: "absolute", top: 0 }}
+                          onAnimationComplete={() => {
+                            setPrevPage(null);
+                            setIsAnimating(false);
+                          }}
+                        >
+                          <Page
+                            pageNumber={currentPage}
+                            width={
+                              fitToScreen
+                                ? window.innerWidth -
+                                  (window.innerWidth / 100) * 20
+                                : undefined
+                            }
+                            scale={fitToScreen ? undefined : zoomLevel}
+                            renderTextLayer={false}
+                            renderAnnotationLayer={false}
+                            style={styles.page}
+                          />
+                        </motion.div>
+                      )}
                     </motion.div>
                   </AnimatePresence>
                 </Document>
@@ -377,9 +450,10 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     width: "90vw",
-    minHeight: "fit-content",
-    maxHeight: "90vh",
+    height: "fit-content",
+    maxHeight: "80vh",
     overflow: "hidden",
+    overflowY: "auto",
     padding: "10px",
     backgroundColor: "#1e1e1e",
     borderRadius: "8px",
