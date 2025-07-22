@@ -5,10 +5,7 @@ import DataWrapper from "@/components/DataWrapper";
 const SessionWrapper = ({ children }) => {
   return (
     <SessionProvider>
-                <DataWrapper>
-
-      {children}
-                </DataWrapper>
+      <DataWrapper>{children}</DataWrapper>
     </SessionProvider>
   );
 };

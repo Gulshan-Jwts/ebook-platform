@@ -40,9 +40,9 @@ export default function RootLayout({ children }) {
             crawl={true}
             showSpinner={false}
           />
-          <Navbar />
+          {/* <Navbar /> */}
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </SessionWrapper>
       </body>
     </html>

@@ -6,6 +6,7 @@ import "@uploadthing/react/styles.css";
 import { UploadButton } from "@uploadthing/react";
 import { useData } from "@/components/DataContext";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const Page = () => {
   const { books } = useData();
@@ -96,8 +97,10 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...formData,pdf: formData.pdfUrl,
-          image: formData.imageUrl,}),
+          ...formData,
+          pdf: formData.pdfUrl,
+          image: formData.imageUrl,
+        }),
       });
 
       const data = await response.json();
@@ -117,7 +120,7 @@ const Page = () => {
         setError(data.error || "Failed to update book");
       }
     } catch (err) {
-      alert(err)
+      alert(err);
       setError("something went wrong from the server");
     } finally {
       done();
@@ -144,20 +147,18 @@ const Page = () => {
       handleConfirmDelete();
     }
   }, [showDeleteModal, deleteBookId]);
-  
 
   const handleConfirmDelete = async () => {
     start();
     try {
-      alert(deleteBookId)
-      
+      alert(deleteBookId);
+
       const response = await fetch(`/api/admin/delete/${deleteBookId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      
 
       if (response.ok) {
         setShowDeleteModal(false);
@@ -195,7 +196,7 @@ const Page = () => {
       }
     }
     getSale();
-  },[]);
+  }, []);
 
   const expandVariants = {
     hidden: { height: 0, opacity: 0 },
@@ -205,7 +206,7 @@ const Page = () => {
 
   return (
     <div className="admin-container">
-      {showSuccess && (
+      {/* {showSuccess && (
         <div className="success-message">
           {editBookId ? "Book updated successfully!" : "Book added successfully!"}
         </div>
@@ -408,8 +409,28 @@ const Page = () => {
             );
           })}
         </div>
-      </section>
-
+      </section> */}
+      <div className="min-h-screen bg-[#2e4057] flex flex-col items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white/10 backdrop-blur-md rounded-lg shadow-lg p-6">
+          <Image
+            src="/newChhaka.jpg"
+            alt="Sample Image"
+            width={400}
+            height={300}
+            className="w-full h-64 object-cover rounded-md mb-4"
+          />
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-white mb-2">
+              Mujhse Jyada shana ho gaya kya?
+            </h1>
+            <p className="text-gray-200">
+              Bus Bhai Prince Maine banaya hai aur tu mujhse shana ban raha hai.
+              &quot;Jinko Patthar se humne banaya sanam, vo khuda ho gaye
+              dekhte dekhte.&quot;
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
