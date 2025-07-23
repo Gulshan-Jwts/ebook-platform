@@ -206,7 +206,7 @@ const Page = () => {
 
   return (
     <div className="admin-container">
-      {/* {showSuccess && (
+      {showSuccess && (
         <div className="success-message">
           {editBookId ? "Book updated successfully!" : "Book added successfully!"}
         </div>
@@ -409,8 +409,8 @@ const Page = () => {
             );
           })}
         </div>
-      </section> */}
-      <div className="min-h-screen bg-[#2e4057] flex flex-col items-center justify-center p-4">
+      </section>
+      {/* <div className="min-h-screen bg-[#2e4057] flex flex-col items-center justify-center p-4">
         <div className="max-w-md w-full bg-white/10 backdrop-blur-md rounded-lg shadow-lg p-6">
           <Image
             src="/newChhaka.jpg"
@@ -430,7 +430,7 @@ const Page = () => {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

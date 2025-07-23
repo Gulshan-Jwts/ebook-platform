@@ -25,7 +25,7 @@ const Page = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-[#2e4057] flex flex-col items-center justify-center p-4">
+      {/* <div className="min-h-screen bg-[#2e4057] flex flex-col items-center justify-center p-4">
         <div className="max-w-md w-full bg-white/10 backdrop-blur-md rounded-lg shadow-lg p-6">
           <Image
             src="/newChhaka.jpg"
@@ -41,8 +41,8 @@ const Page = () => {
             </p>
           </div>
         </div>
-      </div>
-      {/* <main>
+      </div> */}
+      <main>
         {isLoading ? (
           <>
             <Hero isLoading={isLoading} />
@@ -59,7 +59,7 @@ const Page = () => {
         {books && books.length === 0 && (
           <div className="no-books">No books to show</div>
         )}
-      </main> */}
+      </main>
     </>
   );
 };
